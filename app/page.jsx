@@ -11,6 +11,7 @@ import CandidatesContent from "../components/investors/CandidatesContent";
 import Transactions from "@/components/token/Transactions";
 import InvestorRequestsContent from "@/components/investors/InvestorRequestsContent";
 import PositionReportsContent from "@/components/investors/PositionReportsContent";
+import Settings from "@/components/settings/Settings";
 
 export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -48,6 +49,10 @@ export default function App() {
         return <div>Primary Market</div>;
       case "secondary-market":
         return <div>Secondary Market</div>;
+
+      // Setting
+      case "settings":
+        return <Settings/>
 
       default:
         return <DashboardContent />;

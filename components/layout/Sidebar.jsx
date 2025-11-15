@@ -6,7 +6,8 @@ import {
   TrendingUp, 
   TrendingDown,
   ChevronRight,
-  X
+  X,
+  Settings
 } from 'lucide-react';
 
 const Sidebar = ({ isOpen, setIsOpen, activeTab, setActiveTab }) => {
@@ -25,6 +26,7 @@ const menuItems = [
     icon: Users,
     subItems: ['Investor List', 'Candidates', 'Position Reports', 'Investor Requests']
   },
+  { id: 'settings', label: 'Settings', icon: Settings},
   { id: 'primary-market', label: 'Primary Market', icon: TrendingUp },
   { id: 'secondary-market', label: 'Secondary Market', icon: TrendingDown }
 ];
