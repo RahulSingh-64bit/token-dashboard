@@ -1,3 +1,4 @@
+"use client"
 import { useState } from "react";
 import { SettingsMainView } from "@/components/settings/SettingsMainView";
 import { TokenInfoView } from "@/components/settings/TokenInfoView";
