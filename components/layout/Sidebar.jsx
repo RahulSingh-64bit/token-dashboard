@@ -18,42 +18,61 @@ export default function Sidebar({ isOpen, setIsOpen }) {
   const pathname = usePathname();
   const [expandedItem, setExpandedItem] = useState(null);
 
-  const menuItems = [
-    { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
-    {
-      id: "token",
-      label: "Token",
-      icon: Coins,
-      subItems: [
-        { label: "Token actions", href: "/dashboard/token/actions" },
-        { label: "Agents", href: "/dashboard/token/agents" },
-        { label: "Transactions", href: "/dashboard/token/transactions" },
-        { label: "Requests", href: "/dashboard/token/requests" },
-        { label: "Documents", href: "/dashboard/token/documents" },
-        { label: "Settings", href: "/dashboard/settings" },
-      ],
-    },
-    {
-      id: "investors",
-      label: "Investors",
-      icon: Users,
-      subItems: [
-        { label: "Investor List", href: "/dashboard/investors" },
-        { label: "Candidates", href: "/dashboard/investors/candidates" },
-        { label: "Position Reports", href: "/dashboard/investors/reports" },
-        { label: "Investor Requests", href: "/dashboard/investors/requests" },
-      ],
-    },
-    { id: "primary-market", label: "Primary Market", icon: TrendingUp, href: "/dashboard/primary-market" },
-    { id: "secondary-market", label: "Secondary Market", icon: TrendingDown, href: "/dashboard/secondary-market" },
-  ];
+ const menuItems = [
+  { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
+  {
+    id: "token",
+    label: "Token",
+    icon: Coins,
+    subItems: [
+      { label: "Token actions", href: "/dashboard/token/actions" },
+      { label: "Agents", href: "/dashboard/token/agents" },
+      { label: "Transactions", href: "/dashboard/token/transactions" },
+      { label: "Requests", href: "/dashboard/token/requests" },
+      { label: "Documents", href: "/dashboard/token/documents" },
+      { label: "Settings", href: "/dashboard/token/settings" },
+    ],
+  },
+  {
+    id: "investors",
+    label: "Investors",
+    icon: Users,
+    subItems: [
+      { label: "Investor List", href: "/dashboard/investors/investorsList" },
+      { label: "Candidates", href: "/dashboard/investors/candidates" },
+      { label: "Position Reports", href: "/dashboard/investors/reports" },
+      { label: "Investor Requests", href: "/dashboard/investors/requests" },
+    ],
+  },
+  {
+    id: "primary-market",
+    label: "Primary Market",
+    icon: TrendingUp,
+    subItems: [
+      { label: "Subscription Orders", href: "/dashboard/primary-market/subscription-orders" },
+      { label: "Redemption Orders", href: "/dashboard/primary-market/redemption-orders" },
+    ],
+  },
+  {
+    id: "secondary-market",
+    label: "Secondary Market",
+    icon: TrendingDown,
+    subItems: [
+      { label: "Billboard Settings", href: "/dashboard/secondary-market/billboard-settings" },
+      { label: "Billboard Offers", href: "/dashboard/secondary-market/billboard-offers" },
+      { label: "CEX", href: "/dashboard/secondary-market/cex" },
+    ],
+  },
+];
 
-  // Auto-expand correct section
-  useEffect(() => {
-    if (pathname.startsWith("/dashboard/token")) setExpandedItem("token");
-    else if (pathname.startsWith("/dashboard/investors")) setExpandedItem("investors");
-    else setExpandedItem(null);
-  }, [pathname]);
+  // Auto-expand correct section based on current pathname
+useEffect(() => {
+  if (pathname.startsWith("/dashboard/token")) setExpandedItem("token");
+  else if (pathname.startsWith("/dashboard/investors")) setExpandedItem("investors");
+  else if (pathname.startsWith("/dashboard/primary-market")) setExpandedItem("primary-market");
+  else if (pathname.startsWith("/dashboard/secondary-market")) setExpandedItem("secondary-market");
+  else setExpandedItem(null);
+}, [pathname]);
 
   // Check if a top-level item should be highlighted
   const isTopLevelActive = (item) => {

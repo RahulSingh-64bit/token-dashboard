@@ -1,17 +1,312 @@
-import { BarChart3 } from "lucide-react";
+"use client";
 
-export default function PositionReportsContent() {
-  return (
-    <div className="p-4 md:p-6 lg:p-8">
-      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-4">
-        <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
-          <BarChart3 className="w-8 h-8 text-primary" />
+import { useState } from "react";
+import { format } from "date-fns";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { FileSearch, Eye, Download, Plus, CalendarIcon, User, Clock } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
+// Form Schema
+const formSchema = z.object({
+  title: z.string().min(3, "Title must be at least 3 characters"),
+  date: z.date({ required_error: "Please select a date and time" }),
+});
+
+export default function PositionReports() {
+  const [reports, setReports] = useState([]);
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [selectedReport, setSelectedReport] = useState(null);
+
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: { title: "", date: null },
+  });
+
+  const onSubmit = (values) => {
+    const newReport = {
+      id: Date.now().toString(),
+      title: values.title,
+      reportingDate: values.date,
+      creationDate: new Date(),
+      generatedBy: "Current User",
+    };
+    setReports((prev) => [...prev, newReport]);
+    form.reset();
+    setIsCreateOpen(false);
+  };
+
+  const handleDownload = (report) => {
+    // Simulate PDF download
+    const link = document.createElement("a");
+    link.href = "#";
+    link.download = `${report.title.replace(/\s+/g, "_")}_Position_Report.pdf`;
+    link.click();
+    alert(`Downloading: ${report.title}.pdf`);
+  };
+
+  const formatDate = (date) => {
+    return format(date, "dd MMM yyyy, HH:mm");
+  };
+
+  // Empty State
+  if (reports.length === 0) {
+    return (
+      <div className="p-6 md:p-10 lg:p-12">
+        <div className="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-8 max-w-3xl mx-auto">
+          <div className="w-32 h-32 rounded-full bg-primary/10 flex items-center justify-center">
+            <FileSearch className="w-16 h-16 text-primary" />
+          </div>
+          <div className="space-y-4">
+            <h2 className="text-3xl font-bold">No Position Reports Yet</h2>
+            <p className="text-lg text-muted-foreground">
+              Generate your first report to see token holder positions at a specific point in time.
+            </p>
+          </div>
+
+          <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
+            <DialogTrigger asChild>
+              <Button size="lg" className="gap-3">
+                <Plus className="w-5 h-5" />
+                Create Position Report
+              </Button>
+            </DialogTrigger>
+            <CreateReportDialog form={form} onSubmit={onSubmit} />
+          </Dialog>
         </div>
-        <h1 className="text-2xl md:text-3xl font-bold">Position Reports</h1>
-        <p className="text-muted-foreground max-w-md">
-          This page will display detailed position reports and analytics for all investors.
-        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="p-6 md:p-8 lg:p-10 space-y-8">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Position Reports</h1>
+          <p className="text-muted-foreground mt-2">
+            Historical snapshots of token holder positions
+          </p>
+        </div>
+
+        <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
+          <DialogTrigger asChild>
+            <Button>
+              <Plus className="w-4 h-4 mr-2" />
+              Create Report
+            </Button>
+          </DialogTrigger>
+          <CreateReportDialog form={form} onSubmit={onSubmit} />
+        </Dialog>
+      </div>
+
+      {/* Table */}
+      <Card>
+        <CardContent className="p-0">
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-28">Actions</TableHead>
+                  <TableHead>Report Title</TableHead>
+                  <TableHead>Reporting Date</TableHead>
+                  <TableHead>Created</TableHead>
+                  <TableHead>Generated By</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {reports.map((report) => (
+                  <TableRow key={report.id} className="hover:bg-muted/50">
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => setSelectedReport(report)}
+                            >
+                              <Eye className="w-4 h-4" />
+                            </Button>
+                          </DialogTrigger>
+                          <ViewReportDialog report={selectedReport} />
+                        </Dialog>
+
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleDownload(report)}
+                        >
+                          <Download className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                    <TableCell className="font-semibold text-foreground">
+                      {report.title}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <CalendarIcon className="w-4 h-4 text-muted-foreground" />
+                        {formatDate(report.reportingDate)}
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">
+                      {formatDate(report.creationDate)}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <User className="w-4 h-4 text-muted-foreground" />
+                        {report.generatedBy}
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Footer */}
+      <div className="flex justify-between items-center text-sm text-muted-foreground">
+        <span>{reports.length} report{reports.length !== 1 && "s"}</span>
+        <span>Showing all reports</span>
       </div>
     </div>
+  );
+}
+
+// Reusable Create Dialog
+function CreateReportDialog({ form, onSubmit }) {
+  return (
+    <DialogContent className="sm:max-w-md">
+      <DialogHeader>
+        <DialogTitle>Create Position Report</DialogTitle>
+        <p className="text-sm text-muted-foreground">
+          Generate a snapshot of token positions at a specific point in time
+        </p>
+      </DialogHeader>
+
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Report Title</FormLabel>
+                <FormControl>
+                  <Input placeholder="e.g. Q4 2025 Dividend Distribution" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="date"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>Reference Date & Time</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          "pl-3 text-left font-normal",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        {field.value ? format(field.value, "PPP, HH:mm") : "Pick a date & time"}
+                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={field.value}
+                      onSelect={field.onChange}
+                      disabled={(date) => date > new Date() || date < new Date("2020-01-01")}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <DialogFooter>
+            <Button type="submit" className="w-full sm:w-auto">
+              Create Report
+            </Button>
+          </DialogFooter>
+        </form>
+      </Form>
+    </DialogContent>
+  );
+}
+
+// View Report Dialog
+function ViewReportDialog({ report }) {
+  if (!report) return null;
+
+  return (
+    <DialogContent className="sm:max-w-2xl">
+      <DialogHeader>
+        <DialogTitle className="text-2xl">{report.title}</DialogTitle>
+        <div className="flex items-center gap-4 mt-2">
+          <Badge variant="secondary">
+            <Clock className="w-3.5 h-3.5 mr-1" />
+            Generated on {format(report.creationDate, "dd MMM yyyy, HH:mm")}
+          </Badge>
+          <Badge variant="outline">
+            <User className="w-3.5 h-3.5 mr-1" />
+            {report.generatedBy}
+          </Badge>
+        </div>
+      </DialogHeader>
+
+      <div className="space-y-6 py-4">
+        <div className="grid grid-cols-2 gap-6">
+          <div>
+            <p className="text-sm text-muted-foreground">Reporting Date</p>
+            <p className="font-medium text-lg">{format(report.reportingDate, "EEEE, dd MMMM yyyy 'at' HH:mm")}</p>
+          </div>
+          <div>
+            <p className="text-sm text-muted-foreground">Report ID</p>
+            <p className="font-mono text-sm">#{report.id.slice(-8)}</p>
+          </div>
+        </div>
+
+        <div className="bg-muted/50 rounded-lg p-8 text-center">
+          <FileSearch className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
+          <p className="text-lg font-medium">Position Report Ready</p>
+          <p className="text-muted-foreground mt-2">
+            This report contains the complete list of token holders and their balances as of the selected date.
+          </p>
+        </div>
+      </div>
+
+      <DialogFooter>
+        <Button onClick={() => handleDownload(report)} className="gap-2">
+          <Download className="w-4 h-4" />
+          Download PDF
+        </Button>
+      </DialogFooter>
+    </DialogContent>
   );
 }

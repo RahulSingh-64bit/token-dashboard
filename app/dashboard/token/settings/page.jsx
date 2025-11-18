@@ -1,5 +1,3 @@
-// app/dashboard/settings/page.jsx
+import SettingsPage from "@/components/settings/SettingsPage";
 
-import Settings from "@/components/settings/Settings";
-
-export default function Page() { return <Settings />; }
+export default function Page() { return <SettingsPage />; }
