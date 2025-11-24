@@ -1,1 +1,1 @@
-export default function Page() { return <div className="">coming soon</div>; }
+export default function Page() { return <div className="">cex-page</div>; }

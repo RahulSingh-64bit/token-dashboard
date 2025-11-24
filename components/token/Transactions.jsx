@@ -187,7 +187,7 @@ export default function Transactions() {
           </div>
         </div>
 
-        {/* Your Exact Pagination Style */}
+        {/* Pagination */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="text-sm text-muted-foreground">
             {totalItems} transaction{totalItems !== 1 && "s"}

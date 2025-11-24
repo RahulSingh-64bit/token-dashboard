@@ -20,18 +20,10 @@ const SettingsPage = () => {
   return (
     <div className="min-h-screen bg-background">
       <div className=" mx-auto p-4 md:p-6 lg:p-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-semibold text-foreground">
-            Token Configuration & Rules
-          </h2>
-          <p className="text-muted-foreground mt-1">
-            Configure your token behavior, compliance rules, and restrictions.
-          </p>
-        </div>
+
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Left Panel - Menu (Independent Scroll) */}
+          {/* Left Panel - Menu  */}
           <div className="h-full">
             <div className="h-full max-h-[calc(100vh-180px)] lg:max-h-[calc(100vh-140px)] overflow-hidden border rounded-xl bg-card shadow-sm">
               <div className="p-6 border-b bg-muted/40 sticky top-0 z-10">
@@ -58,10 +50,10 @@ const SettingsPage = () => {
             </div>
           </div>
 
-          {/* Right Panel - Detail View (Independent Scroll) */}
+          {/* Right Panel - Detail View  */}
           <div className="h-full">
             {currentView === "main" ? (
-              // Show a nice placeholder when nothing is selected
+              
               <div className="h-full flex items-center justify-center border-2 border-dashed border-muted-foreground/20 rounded-xl bg-card/50">
                 <div className="text-center">
                   <div className="w-16 h-16 mx-auto mb-4 bg-primary/10 rounded-full flex items-center justify-center">

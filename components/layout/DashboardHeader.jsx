@@ -14,7 +14,7 @@ const DashboardHeader = ({ setIsOpen }) => {
         
         <div className="flex-1 lg:flex-none" />
         
-        {/* You can add more header items here later like notifications, profile, etc */}
+        {/* Future header items like notifications, profile, etc */}
       </div>
     </header>
   );

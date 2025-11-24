@@ -30,8 +30,7 @@ const regions = [
       "Turkmenistan", "United Arab Emirates", "Uzbekistan", "Vietnam", "Yemen"
     ]
   }
-  // Add more regions here later
-];
+  ];
 
 export const JurisdictionsView = () => {
   const [selectedCountries, setSelectedCountries] = useState(() => 

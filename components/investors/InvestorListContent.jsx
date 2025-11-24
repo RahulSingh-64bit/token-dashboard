@@ -1,4 +1,3 @@
-// app/investors/page.jsx   (or any component file)
 "use client";
 
 import { useState } from "react";

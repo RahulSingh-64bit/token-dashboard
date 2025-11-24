@@ -1,4 +1,3 @@
-// app/dashboard/layout.jsx
 "use client";
 
 import { useState } from "react";
@@ -10,12 +9,12 @@ export default function DashboardLayout({ children }) {
 
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden">
-      {/* Your existing Sidebar */}
+      
       <Sidebar
         isOpen={sidebarOpen}
         setIsOpen={setSidebarOpen}
-        activeTab="" // We'll handle active state via URL now
-        setActiveTab={() => {}} // Not needed anymore
+        activeTab="" 
+        setActiveTab={() => {}} 
       />
 
       <div className="flex-1 flex flex-col overflow-hidden">

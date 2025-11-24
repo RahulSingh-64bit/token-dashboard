@@ -177,7 +177,7 @@ export default function Candidates() {
           </div>
         </div>
 
-        {/* Your Exact Pagination Style */}
+        {/* Pagination */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="text-sm text-muted-foreground">
             {mockCandidates.length} items

@@ -14,21 +14,21 @@ import { Button } from "@/components/ui/button";
 export const TokenInfoView = () => {
   return (
     <div className="flex-1 space-y-6 overflow-y-auto p-6">
-      {/* ----- Header ----- */}
+      {/*  Header  */}
       <div>
         <h1 className="text-2xl font-semibold text-foreground mb-2">
           Token info
         </h1>
       </div>
 
-      {/* ----- Main Card (takes all available width) ----- */}
+      
       <Card className="w-full">
         <CardHeader>
           <CardTitle>Token info</CardTitle>
         </CardHeader>
 
         <CardContent className="space-y-6">
-          {/* ----- Row 1 ----- */}
+          {/*  Row 1  */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="name">
@@ -51,7 +51,7 @@ export const TokenInfoView = () => {
             </div>
           </div>
 
-          {/* ----- Row 2 ----- */}
+          {/*  Row 2  */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="decimals">
@@ -83,7 +83,7 @@ export const TokenInfoView = () => {
             </div>
           </div>
 
-          {/* ----- Logo Upload ----- */}
+          {/*  Logo Upload  */}
           <div className="space-y-2">
             <Label>
               Token logo <span className="text-destructive">*</span>
@@ -108,7 +108,7 @@ export const TokenInfoView = () => {
             </p>
           </div>
 
-          {/* ----- Row 3 ----- */}
+          {/*  Row 3  */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="instrument">
@@ -143,7 +143,7 @@ export const TokenInfoView = () => {
             </div>
           </div>
 
-          {/* ----- Save Button ----- */}
+          {/*  Save Button  */}
           <Button className="w-full">Save changes</Button>
         </CardContent>
       </Card>
